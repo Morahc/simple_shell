@@ -1,93 +1,90 @@
 #include "main.h"
 
-/**
- * _strlen - returns the length of a string
- * @s: string s
- * Return: length of string
- */
-int _strlen(char *s)
-{
-	char *p = s;
+int _strlen(const char *s);
+char *_strcpy(char *dest, const char *src);
+char *_strcat(char *dest, const char *src);
+char *_strncat(char *dest, const char *src, size_t n);
 
-	while (*s)
-		s++;
-	return (s - p);
+/**
+ * _strlen - Returns the length of a string.
+ * @s: A pointer to the characters string.
+ *
+ * Return: The length of the character string.
+ */
+
+int _strlen(const char *s)
+{
+	int length = 0;
+
+	if (!s)
+		return (length);
+	for (length = 0; s[length]; length++)
+		;
+	return (length);
 }
 
 /**
- * _strcat - concatenates two strings
- * @dest: copy destination
- * @src: copy source
- * Return: concatenated string
+ * _strcpy - Copies the string pointed to by src, including the
+ *           terminating null byte, to the buffer pointed by des.
+ * @dest: Pointer to the destination of copied string.
+ * @src: Pointer to the src of the source string.
+ *
+ * Return: Pointer to dest.
  */
-char *_strcat(char *dest, char *src)
-{
-	char *ptr = dest + _strlen(dest);
 
-	while (*src)
-		*ptr++ = *src++;
-	*ptr = 0;
+char *_strcpy(char *dest, const char *src)
+{
+	size_t i;
+
+	for (i = 0; src[i] != '\0'; i++)
+		dest[i] = src[i];
+	dest[i] = '\0';
 	return (dest);
 }
 
 /**
- * _strcmp - compares two strings
- * @s1: string 1
- * @s2: string 2
- * Return: 1 if true, 0 if false
+ * _strcat - Concantenates two strings.
+ * @dest: Pointer to destination string.
+ * @src: Pointer to source string.
+ *
+ * Return: Pointer to destination string.
  */
-int _strcmp(char *s1, char *s2)
-{
-	while (*s1)
-	{
-		if (*s1 != *s2)
-			break;
-		s1++;
-		s2++;
-	}
 
-	return (*(unsigned char *)s1 - *(unsigned char *)s2);
+char *_strcat(char *dest, const char *src)
+{
+	char *destTemp;
+	const char *srcTemp;
+
+	destTemp = dest;
+	srcTemp =  src;
+
+	while (*destTemp != '\0')
+		destTemp++;
+
+	while (*srcTemp != '\0')
+		*destTemp++ = *srcTemp++;
+	*destTemp = '\0';
+	return (dest);
 }
 
 /**
- * _strdup - returns a pointer to a newly allocated space in memory,
- * which contains a copy of the string given as a parameter.
- * @str: string to be copied
- * Return: copied string
+ * _strncat - Concantenates two strings where n number
+ *            of bytes are copied from source.
+ * @dest: Pointer to destination string.
+ * @src: Pointer to source string.
+ * @n: n bytes to copy from src.
+ *
+ * Return: Pointer to destination string.
  */
-char *_strdup(char *str)
+
+char *_strncat(char *dest, const char *src, size_t n)
 {
-	int i, len;
-	char *copy;
+	size_t dest_len = _strlen(dest);
+	size_t i;
 
-	if (!str)
-		return (NULL);
-	len = _strlen(str);
-	copy = malloc(sizeof(char) * len + 1);
-	if (!copy)
-	{
-		perror("Malloc failed\n");
-		exit(errno);
-	}
-	for (i = 0; i < len; i++)
-		copy[i] = str[i];
-	copy[i] = 0;
-	return (copy);
-}
+	for (i = 0; i < n && src[i] != '\0'; i++)
+		dest[dest_len + i] = src[i];
+	dest[dest_len + i] = '\0';
 
-/**
- * *_strcpy - copies the string pointed to by src,
- * including the terminating null byte
- * @dest: copied string
- * @src: string to be copied
- * Return: pointer to new copied string
- */
-char *_strcpy(char *dest, char *src)
-{
-	char *ptr = dest;
-
-	while (*src)
-		*dest++ = *src++;
-	*dest = 0;
-	return (ptr);
+	return (dest);
 }
